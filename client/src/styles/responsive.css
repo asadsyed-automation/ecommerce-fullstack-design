@@ -1,0 +1,303 @@
+/* ================================================
+   responsive.css — complete responsive system
+   ================================================ */
+
+/* -----------------------------------------------
+   GLOBAL OVERFLOW GUARD
+----------------------------------------------- */
+html, body, #root {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* -----------------------------------------------
+   CATEGORY SECTIONS — shared scroll row CSS
+   (Home & Outdoor + Consumer Electronics)
+----------------------------------------------- */
+
+/* Mobile title — hidden on desktop */
+.category-section__mobile-title {
+  display: none;
+}
+
+/* Desktop: normal CSS grid */
+.category-section__scroll-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+/* -----------------------------------------------
+   SUPPLIERS BY REGION — scroll row CSS
+----------------------------------------------- */
+
+/* Desktop: CSS grid */
+.regions-section__scroll-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+/* ================================================
+   MOBILE  max-width: 767px
+   ================================================ */
+@media (max-width: 767px) {
+
+  /* ----- DEALS SECTION ----- */
+  .deals-section__inner {
+    flex-direction: column !important;
+    padding: 14px 16px;
+    gap: 0;
+  }
+  .deals-section__left {
+    width: 100% !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border);
+    padding-right: 0 !important;
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .deals-section__right {
+    padding-left: 0 !important;
+  }
+  .deals-section__products {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    gap: 10px;
+    padding-bottom: 6px;
+  }
+  .deals-section__products::-webkit-scrollbar {
+    display: none;
+  }
+  .deals-section__products .deal-card {
+    flex: 0 0 130px !important;
+    min-width: 130px !important;
+    max-width: 130px !important;
+    scroll-snap-align: start;
+  }
+
+  /* ----- CATEGORY SECTIONS (Home & Outdoor, Consumer Electronics) ----- */
+  .category-section__inner {
+    grid-template-columns: 1fr !important;
+    padding: 14px 0 14px 16px; /* left padding only, right open for scroll */
+  }
+  .category-section__promo {
+    display: none !important;
+  }
+  .category-section__products {
+    padding-left: 0 !important;
+    overflow: hidden;
+  }
+  .category-section__mobile-title {
+    display: block !important;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    padding-right: 16px;
+  }
+
+  /* THE KEY FIX: horizontal scroll row */
+  .category-section__scroll-row {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    gap: 10px;
+    padding-bottom: 6px;
+    padding-right: 16px; /* breathing room at end of scroll */
+    /* CRITICAL: grid override must be fully removed */
+    grid-template-columns: unset !important;
+  }
+  .category-section__scroll-row::-webkit-scrollbar {
+    display: none;
+  }
+  .category-section__scroll-item {
+    flex: 0 0 140px !important;
+    min-width: 140px !important;
+    max-width: 140px !important;
+    scroll-snap-align: start;
+  }
+  /* Product card fills its scroll item */
+  .category-section__scroll-item .product-card {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ----- SUPPLIER SECTION ----- */
+  .supplier-section__inner {
+    grid-template-columns: 1fr !important;
+    padding: 28px 16px;
+    gap: 16px;
+  }
+  .supplier-section__form {
+    display: none !important;
+  }
+  .supplier-section__mobile-cta {
+    display: block !important;
+  }
+  .supplier-section__text h2 {
+    font-size: 20px;
+  }
+
+  /* ----- RECOMMENDED ITEMS — 2-col grid (matches design) ----- */
+  .recommended-section__inner {
+    padding: 14px 16px;
+  }
+  .recommended-section__grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+
+  /* ----- EXTRA SERVICES — 2-col grid ----- */
+  .services-section__inner {
+    padding: 14px 16px;
+  }
+  .services-section__grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+  }
+  .service-card {
+    height: 130px;
+  }
+
+  /* ----- SUPPLIERS BY REGION — horizontal scroll (same as deals) ----- */
+  .regions-section__inner {
+    padding: 14px 0 14px 16px; /* left padding, right open */
+  }
+  .regions-section__scroll-row {
+    display: flex !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    gap: 10px;
+    padding-bottom: 6px;
+    padding-right: 16px;
+    grid-template-columns: unset !important;
+  }
+  .regions-section__scroll-row::-webkit-scrollbar {
+    display: none;
+  }
+  .regions-section__scroll-item {
+    flex: 0 0 130px !important;
+    min-width: 130px !important;
+    scroll-snap-align: start;
+  }
+  .regions-section__scroll-item .region-card {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ----- NEWSLETTER ----- */
+  .newsletter-section__inner {
+    padding: 24px 16px;
+  }
+  .newsletter-section__form {
+    flex-direction: column !important;
+  }
+  .newsletter-section__input,
+  .newsletter-section__btn {
+    width: 100%;
+  }
+
+  /* ----- SECTION PADDING ----- */
+  .section__inner {
+    padding: 14px 16px;
+  }
+  .section__title {
+    font-size: 16px;
+  }
+
+  /* ----- HERO ----- */
+  .hero-section__inner {
+    grid-template-columns: 1fr !important;
+    min-height: auto;
+    padding: 0;
+  }
+  .hero-sidebar,
+  .hero-user-panel {
+    display: none !important;
+  }
+  .hero-banner {
+    padding: 28px 20px;
+    min-height: 200px;
+  }
+  .hero-banner__title {
+    font-size: 22px;
+  }
+  .hero-banner__image {
+    width: 50%;
+    opacity: 0.85;
+  }
+}
+
+/* ================================================
+   TABLET  768px – 1199px
+   ================================================ */
+@media (min-width: 768px) and (max-width: 1199px) {
+
+  .hero-section__inner {
+    grid-template-columns: 180px 1fr !important;
+  }
+  .hero-user-panel {
+    display: none !important;
+  }
+
+  .deals-section__products {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+
+  .category-section__inner {
+    grid-template-columns: 180px 1fr !important;
+  }
+  .category-section__scroll-row {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .supplier-section__inner {
+    grid-template-columns: 1fr 300px !important;
+  }
+
+  .recommended-section__grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .regions-section__scroll-row {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+/* ================================================
+   DESKTOP  ≥ 1200px
+   ================================================ */
+@media (min-width: 1200px) {
+  .deals-section__products {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .category-section__scroll-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .recommended-section__grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+  .regions-section__scroll-row {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}

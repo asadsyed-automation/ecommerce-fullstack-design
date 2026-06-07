@@ -1,43 +1,67 @@
+import { useState, useEffect } from 'react';
+import { getProducts } from '../services/api';
 import ProductCard from './ProductCard';
 
-const ELECTRONICS_PRODUCTS = [
-  { id: '20', name: 'Smart watches', price: 'USD 19', showFrom: true },
-  { id: '21', name: 'Cameras', price: 'USD 89', showFrom: true },
-  { id: '22', name: 'Headphones', price: 'USD 70', showFrom: true },
-  { id: '23', name: 'Smart watches', price: 'USD 90', showFrom: true },
-  { id: '24', name: 'Gaming set', price: 'USD 35', showFrom: true },
-  { id: '25', name: 'Laptops & PC', price: 'USD 340', showFrom: true },
-  { id: '26', name: 'Smartphones', price: 'USD 19', showFrom: true },
-  { id: '27', name: 'Electric kettle', price: 'USD 240', showFrom: true },
-];
+function ConsumerElectronicsSection() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading]   = useState(true);
 
-function ConsumerElectronicsSection({ products = ELECTRONICS_PRODUCTS }) {
+  useEffect(() => {
+    getProducts()
+      .then(res => {
+        // Prefer Electronics category; fallback to last 8 products
+        const elec = res.data.filter(p =>
+          p.category?.toLowerCase().includes('electronic') ||
+          p.category?.toLowerCase().includes('gadget') ||
+          p.category?.toLowerCase().includes('tech')
+        );
+        setProducts(elec.length >= 4 ? elec.slice(0, 8) : res.data.slice(-8));
+      })
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <section className="category-section">
       <div className="category-section__inner">
 
         {/* LEFT promo — desktop/tablet only */}
         <div className="category-section__promo">
-          <div className="category-section__promo-title">Consumer electronics and gadgets</div>
-          <div className="category-section__promo-img" />
+          <div className="category-section__promo-title">
+            Consumer electronics and gadgets
+          </div>
+          <div className="category-section__promo-img"
+            style={{ background: 'linear-gradient(135deg, #e8f0fe, #c2d4f8)' }} />
           <button className="category-section__promo-btn">Source now →</button>
         </div>
 
         {/* RIGHT products */}
         <div className="category-section__products">
-
-          {/* Mobile section title — only visible on mobile */}
           <div className="category-section__mobile-title">Consumer electronics</div>
-
-          {/* Scroll row wrapper */}
           <div className="category-section__scroll-row">
-            {products.map(p => (
-              <div key={p.id} className="category-section__scroll-item">
-                <ProductCard {...p} />
-              </div>
-            ))}
+            {loading
+              ? [...Array(4)].map((_, i) => (
+                  <div key={i} className="category-section__scroll-item">
+                    <div style={{
+                      width: '100%', aspectRatio: '1/1', borderRadius: '8px',
+                      background: 'var(--gray-100)', animation: 'pulse 1.5s infinite',
+                    }} />
+                  </div>
+                ))
+              : products.map(p => (
+                  <div key={p._id} className="category-section__scroll-item">
+                    <ProductCard
+                      id={p._id}
+                      name={p.name}
+                      price={`$${p.price?.toFixed(2)}`}
+                      image={p.image}
+                      showFrom={true}
+                    />
+                  </div>
+                ))
+            }
           </div>
-
+          <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}`}</style>
         </div>
       </div>
     </section>

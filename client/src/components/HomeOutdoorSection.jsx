@@ -1,17 +1,26 @@
+import { useState, useEffect } from 'react';
+import { getProducts } from '../services/api';
 import ProductCard from './ProductCard';
 
-const HOME_OUTDOOR_PRODUCTS = [
-  { id: '10', name: 'Soft chairs', price: 'USD 19', showFrom: true },
-  { id: '11', name: 'Sofa & chair', price: 'USD 19', showFrom: true },
-  { id: '12', name: 'Kitchen dishes', price: 'USD 19', showFrom: true },
-  { id: '13', name: 'Smart watches', price: 'USD 19', showFrom: true },
-  { id: '14', name: 'Kitchen mixer', price: 'USD 100', showFrom: true },
-  { id: '15', name: 'Blenders', price: 'USD 39', showFrom: true },
-  { id: '16', name: 'Home appliance', price: 'USD 19', showFrom: true },
-  { id: '17', name: 'Coffee maker', price: 'USD 10', showFrom: true },
-];
+function HomeOutdoorSection() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading]   = useState(true);
 
-function HomeOutdoorSection({ products = HOME_OUTDOOR_PRODUCTS }) {
+  useEffect(() => {
+    getProducts()
+      .then(res => {
+        // Prefer 'Home' or 'Furniture' category; fallback to first 8
+        const home = res.data.filter(p =>
+          p.category?.toLowerCase().includes('home') ||
+          p.category?.toLowerCase().includes('furniture') ||
+          p.category?.toLowerCase().includes('outdoor')
+        );
+        setProducts(home.length >= 4 ? home.slice(0, 8) : res.data.slice(0, 8));
+      })
+      .catch(() => setProducts([]))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <section className="category-section">
       <div className="category-section__inner">
@@ -19,25 +28,38 @@ function HomeOutdoorSection({ products = HOME_OUTDOOR_PRODUCTS }) {
         {/* LEFT promo — desktop/tablet only */}
         <div className="category-section__promo">
           <div className="category-section__promo-title">Home and outdoor</div>
-          <div className="category-section__promo-img" />
+          <div className="category-section__promo-img"
+            style={{ background: 'linear-gradient(135deg, #f5f0e8, #e8dcc8)' }} />
           <button className="category-section__promo-btn">Source now →</button>
         </div>
 
         {/* RIGHT products */}
         <div className="category-section__products">
-
-          {/* Mobile section title — only visible on mobile */}
           <div className="category-section__mobile-title">Home and outdoor</div>
-
-          {/* Scroll row wrapper */}
           <div className="category-section__scroll-row">
-            {products.map(p => (
-              <div key={p.id} className="category-section__scroll-item">
-                <ProductCard {...p} />
-              </div>
-            ))}
+            {loading
+              ? [...Array(4)].map((_, i) => (
+                  <div key={i} className="category-section__scroll-item">
+                    <div style={{
+                      width: '100%', aspectRatio: '1/1', borderRadius: '8px',
+                      background: 'var(--gray-100)', animation: 'pulse 1.5s infinite',
+                    }} />
+                  </div>
+                ))
+              : products.map(p => (
+                  <div key={p._id} className="category-section__scroll-item">
+                    <ProductCard
+                      id={p._id}
+                      name={p.name}
+                      price={`$${p.price?.toFixed(2)}`}
+                      image={p.image}
+                      showFrom={true}
+                    />
+                  </div>
+                ))
+            }
           </div>
-
+          <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}`}</style>
         </div>
       </div>
     </section>

@@ -4,41 +4,16 @@ import Navbar from '../components/Navbar';
 import MobileNavbar from '../components/MobileNavbar';
 import ImagePlaceholder from '../components/ImagePlaceholder';
 import Footer from '../components/Footer';
-import { CART_ITEMS_MOCK, SAVED_ITEMS_MOCK } from '../data/products';
+import { useCart } from '../context/CartContext';
 import '../styles/cart.css';
 import '../styles/navbar.css';
 import '../styles/footer.css';
 
 function Cart() {
-  // Future: replace with CartContext / API
-  const [cartItems, setCartItems] = useState(CART_ITEMS_MOCK);
-  const [savedItems, setSavedItems] = useState(SAVED_ITEMS_MOCK);
+  const { cartItems, savedItems, updateQty, removeFromCart, saveForLater, moveToCart, removeSaved, clearCart } = useCart();
   const [coupon, setCoupon] = useState('');
 
-  const updateQty = (id, qty) =>
-    setCartItems(items => items.map(i => i.id === id ? { ...i, qty: Number(qty) } : i));
-
-  const removeItem = id => setCartItems(items => items.filter(i => i.id !== id));
-
-  const saveForLater = id => {
-    const item = cartItems.find(i => i.id === id);
-    if (item) {
-      setCartItems(items => items.filter(i => i.id !== id));
-      setSavedItems(s => [...s, { id: `s${Date.now()}`, name: item.name, price: item.price, image: item.image }]);
-    }
-  };
-
-  const moveToCart = id => {
-    const item = savedItems.find(i => i.id === id);
-    if (item) {
-      setSavedItems(s => s.filter(i => i.id !== id));
-      setCartItems(c => [...c, {
-        id: `c${Date.now()}`, productId: id, name: item.name,
-        size: 'medium', color: 'blue', material: 'Plastic',
-        seller: 'Artel Market', price: item.price, qty: 1, image: item.image,
-      }]);
-    }
-  };
+  const removeItem = id => removeFromCart(id);
 
   const subtotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
   const discount = 60;
@@ -50,7 +25,7 @@ function Cart() {
   return (
     <div className="cart-page">
       {/* Desktop nav */}
-      <Navbar cartCount={cartItems.length} />
+      <Navbar />
 
       {/* Mobile header */}
       <div className="cart-mobile-header">
@@ -81,7 +56,7 @@ function Cart() {
                 </div>
                 <div className="cart-item__actions">
                   <button className="cart-item__action-btn cart-item__action-btn--remove"
-                    onClick={() => removeItem(item.id)}>Remove</button>
+                    onClick={() => removeFromCart(item.id)}>Remove</button>
                   <button className="cart-item__action-btn cart-item__action-btn--save"
                     onClick={() => saveForLater(item.id)}>Save for later</button>
                 </div>
@@ -106,7 +81,7 @@ function Cart() {
               </svg>
               Back to shop
             </Link>
-            <button className="cart-items__remove-all" onClick={() => setCartItems([])}>
+            <button className="cart-items__remove-all" onClick={() => clearCart()}>
               Remove all
             </button>
           </div>
@@ -275,7 +250,7 @@ function Cart() {
                   <button className="cart-mobile-saved-item__btn cart-mobile-saved-item__btn--move"
                     onClick={() => moveToCart(item.id)}>Move to cart</button>
                   <button className="cart-mobile-saved-item__btn cart-mobile-saved-item__btn--remove"
-                    onClick={() => setSavedItems(s => s.filter(i => i.id !== item.id))}>Remove</button>
+                    onClick={() => removeSaved(item.id)}>Remove</button>
                 </div>
               </div>
             </div>

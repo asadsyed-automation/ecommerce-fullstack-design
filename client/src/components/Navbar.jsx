@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import '../styles/navbar.css';
 
-// Future: accept { cartCount, user } props from auth/cart context
-function Navbar({ cartCount = 0, user = null }) {
+// Navbar now reads auth and cart from context — no props needed
+function Navbar() {
+  const { user, isLoggedIn, isAdmin, logout } = useAuth();
+  const { cartCount } = useCart();
+
   return (
     <>
       {/* Desktop Top Bar */}
@@ -19,24 +24,71 @@ function Navbar({ cartCount = 0, user = null }) {
             Brand
           </Link>
 
-          <div className="top-bar__search">
-            <input type="text" placeholder="Search" />
-            <select className="top-bar__search-category">
-              <option>All category</option>
-              <option>Gadgets</option>
-              <option>Clothes</option>
-              <option>Accessories</option>
+          <div className="top-bar__search" id="navbar-search-form">
+            <input
+              id="navbar-search-input"
+              type="text"
+              placeholder="Search products..."
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  const q = e.target.value.trim();
+                  if (q) window.location.href = `/products?search=${encodeURIComponent(q)}`;
+                }
+              }}
+            />
+            <select className="top-bar__search-category" id="navbar-search-category">
+              <option value="">All category</option>
+              <option value="Gadgets">Gadgets</option>
+              <option value="Clothes">Clothes</option>
+              <option value="Accessories">Accessories</option>
+              <option value="Electronics">Electronics</option>
             </select>
-            <button className="top-bar__search-btn">Search</button>
+            <button
+              className="top-bar__search-btn"
+              id="navbar-search-btn"
+              onClick={() => {
+                const input = document.getElementById('navbar-search-input');
+                const cat = document.getElementById('navbar-search-category');
+                const q = input?.value.trim();
+                const c = cat?.value;
+                let url = '/products';
+                const params = new URLSearchParams();
+                if (q) params.set('search', q);
+                if (c) params.set('category', c);
+                if (params.toString()) url += '?' + params.toString();
+                window.location.href = url;
+              }}
+            >
+              Search
+            </button>
           </div>
 
           <div className="top-bar__actions">
-            <Link to="/login" className="top-bar__action-btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-              </svg>
-              <span>Profile</span>
-            </Link>
+            {/* Profile / User */}
+            {isLoggedIn ? (
+              <div className="top-bar__action-btn top-bar__user-menu">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span>{user?.name?.split(' ')[0] || 'Account'}</span>
+                <div className="top-bar__user-dropdown">
+                  {isAdmin && (
+                    <Link to="/admin" className="top-bar__dropdown-item">Admin Panel</Link>
+                  )}
+                  <button className="top-bar__dropdown-item top-bar__dropdown-item--btn" onClick={logout}>
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <Link to="/login" className="top-bar__action-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                  <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span>Sign In</span>
+              </Link>
+            )}
+
             <Link to="#" className="top-bar__action-btn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                 <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
@@ -72,10 +124,10 @@ function Navbar({ cartCount = 0, user = null }) {
             All category
           </div>
           <div className="bottom-bar__links">
+            <Link to="/products">Products</Link>
             <a href="#">Hot offers</a>
             <a href="#">Gift boxes</a>
             <a href="#">Projects</a>
-            <a href="#">Menu item</a>
             <a href="#">Help ▾</a>
           </div>
           <div className="bottom-bar__right">

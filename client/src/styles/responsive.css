@@ -243,7 +243,7 @@ html, body, #root {
     font-size: 22px;
   }
   .hero-banner__image {
-    width: 50%;
+    width: 100%;
     opacity: 0.85;
   }
 }

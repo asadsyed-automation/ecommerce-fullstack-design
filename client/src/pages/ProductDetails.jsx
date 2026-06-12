@@ -7,9 +7,12 @@ import StarRating from '../components/StarRating';
 import ImagePlaceholder from '../components/ImagePlaceholder';
 import Footer from '../components/Footer';
 import { getProduct, getProducts } from '../services/api';
+import { useCart } from '../context/CartContext';
 import '../styles/productdetails.css';
 import '../styles/navbar.css';
 import '../styles/footer.css';
+
+
 
 const BREADCRUMB = [
   { label: 'Home', path: '/' },
@@ -46,6 +49,10 @@ function ProductDetails() {
   const [error, setError]       = useState(null);
   const [activeTab, setActiveTab]     = useState('Description');
   const [activeThumb, setActiveThumb] = useState(0);
+  const [qty, setQty]                 = useState(1);
+  const [addedToCart, setAddedToCart] = useState(false);
+
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -279,13 +286,40 @@ function ProductDetails() {
                 Worldwide shipping
               </div>
             </div>
-            <button className="detail-supplier__inquiry">Send inquiry</button>
-            <button className="detail-supplier__profile">Seller's profile</button>
+            <button className="detail-supplier__inquiry"
+              onClick={() => {
+                addToCart(product, qty);
+                setAddedToCart(true);
+                setTimeout(() => setAddedToCart(false), 2000);
+              }}
+              disabled={product.stock <= 0}
+              style={{
+                background: addedToCart ? 'var(--accent-green)' : undefined,
+                transition: 'background 0.3s'
+              }}
+            >
+              {addedToCart ? '✓ Added to cart' : 'Add to cart'}
+            </button>
+            {/* Qty selector */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '8px 0' }}>
+              <span style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Qty:</span>
+              <select
+                value={qty}
+                onChange={e => setQty(Number(e.target.value))}
+                style={{
+                  padding: '4px 8px', borderRadius: '6px',
+                  border: '1px solid var(--border)', fontSize: '14px',
+                  background: 'var(--bg-white)', color: 'var(--text-primary)'
+                }}
+              >
+                {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
+              </select>
+            </div>
             <div className="detail-supplier__save">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
                 <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
               </svg>
-              Save for later
+              Send inquiry
             </div>
           </div>
         </div>

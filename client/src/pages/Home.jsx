@@ -24,9 +24,9 @@ function Home() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg-page)' }}>
       {/* Desktop nav */}
-      <Navbar cartCount={0} user={null} />
+      <Navbar />
       {/* Mobile nav */}
-      <MobileNavbar cartCount={0} />
+      <MobileNavbar />
 
       <main>
         <HeroBanner />

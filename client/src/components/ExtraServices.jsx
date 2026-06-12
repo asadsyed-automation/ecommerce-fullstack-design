@@ -1,7 +1,7 @@
-import service1 from 'public/backgrounds/service1.png';
-import service2 from 'public/backgrounds/service2.png';
-import service3 from 'backgrounds/service3.png';
-import service4 from 'backgrounds/service4.png';
+import service1 from '/backgrounds/service1.png';
+import service2 from '/backgrounds/service2.png';
+import service3 from '/backgrounds/service3.png';
+import service4 from '/backgrounds/service4.png';
 import {
   HiOutlineMagnifyingGlass,
   HiOutlineClipboardDocumentList,

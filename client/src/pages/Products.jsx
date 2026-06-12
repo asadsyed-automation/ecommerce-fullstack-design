@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { Link, useSearchParams } from 'react-router-dom';
+import { getProducts } from '../services/api';
 import Navbar from '../components/Navbar';
 import MobileNavbar from '../components/MobileNavbar';
 import Breadcrumb from '../components/Breadcrumb';
@@ -100,6 +100,13 @@ function SidebarSection({ title, open, onToggle, children }) {
 }
 
 function Products() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchVal = searchParams.get('search') || '';
+  const categoryVal = searchParams.get('category') || '';
+
+  const activeCat = categoryVal;
+  const activeMobileCat = categoryVal || 'All category';
+
   // ── API State ──
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -107,8 +114,6 @@ function Products() {
 
   // ── UI State (unchanged) ──
   const [view, setView] = useState('grid');
-  const [activeCat, setActiveCat] = useState('');
-  const [activeMobileCat, setActiveMobileCat] = useState('All category');
   const [selectedBrands, setSelectedBrands] = useState(['Samsung', 'Apple', 'Pocco']);
   const [selectedFeatures, setSelectedFeatures] = useState(['Metallic']);
   const [selectedCondition, setSelectedCondition] = useState('Any');
@@ -130,7 +135,10 @@ function Products() {
       try {
         setLoading(true);
         setError(null);
-        const res = await axios.get('http://localhost:5000/api/products');
+        const res = await getProducts({
+          search: searchVal,
+          category: categoryVal
+        });
         setProducts(res.data);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to load products. Please try again.');
@@ -139,22 +147,57 @@ function Products() {
       }
     };
     fetchProducts();
-  }, []);
+  }, [searchVal, categoryVal]);
 
   const toggleSection = key => setOpenSections(s => ({ ...s, [key]: !s[key] }));
   const toggleBrand = b => setSelectedBrands(s => s.includes(b) ? s.filter(x => x !== b) : [...s, b]);
   const toggleFeature = f => setSelectedFeatures(s => s.includes(f) ? s.filter(x => x !== f) : [...s, f]);
   const removeFilter = tag => setActiveFilters(s => s.filter(x => x !== tag));
 
+  // Category navigation via URL Search Params
+  const toggleCategory = (c) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (activeCat === c || !c) {
+      nextParams.delete('category');
+    } else {
+      nextParams.set('category', c);
+    }
+    setSearchParams(nextParams);
+  };
+
+  const handleMobileCatClick = (c) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (c === 'All category') {
+      nextParams.delete('category');
+    } else {
+      nextParams.set('category', c);
+    }
+    setSearchParams(nextParams);
+  };
+
   // ── Filter logic — uses fetched products ──
   const filtered = useMemo(() => {
-    return products.filter(p => {
-      if (activeCat && p.category !== activeCat) return false;
-      return true;
-      // Future: add brand/feature/condition filters once
-      // backend products include those fields
-    });
-  }, [products, activeCat]);
+    let result = [...products];
+
+    // Filter by price range
+    if (priceMin > 0) {
+      result = result.filter(p => p.price >= priceMin);
+    }
+    if (priceMax < 999999) {
+      result = result.filter(p => p.price <= priceMax);
+    }
+
+    // Sort
+    if (sortBy === 'Price: Low to High') {
+      result.sort((a, b) => a.price - b.price);
+    } else if (sortBy === 'Price: High to Low') {
+      result.sort((a, b) => b.price - a.price);
+    } else if (sortBy === 'Newest') {
+      result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+
+    return result;
+  }, [products, priceMin, priceMax, sortBy]);
 
   // ── Loading state ──
   if (loading) {
@@ -245,7 +288,7 @@ function Products() {
         {MOBILE_CATS.map(c => (
           <button key={c}
             className={`products-mobile-cat-pill${activeMobileCat === c ? ' active' : ''}`}
-            onClick={() => setActiveMobileCat(c)}>
+            onClick={() => handleMobileCatClick(c)}>
             {c}
           </button>
         ))}
@@ -300,9 +343,9 @@ function Products() {
               {[...new Set(products.map(p => p.category).filter(Boolean))].map(c => (
                 <span key={c}
                   className={`sidebar-category-item${activeCat === c ? ' active' : ''}`}
-                  onClick={() => setActiveCat(activeCat === c ? '' : c)}>{c}</span>
+                  onClick={() => toggleCategory(c)}>{c}</span>
               ))}
-              <span className="sidebar-see-all" onClick={() => setActiveCat('')}>See all</span>
+              <span className="sidebar-see-all" onClick={() => toggleCategory('')}>See all</span>
             </div>
           </SidebarSection>
 

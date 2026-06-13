@@ -1,12 +1,12 @@
-import aeFlag from '../assets/flags/ae.png';
-import auFlag from '../assets/flags/au.png';
-import usFlag from '../assets/flags/us.png';
-import ruFlag from '../assets/flags/ru.png';
-import itFlag from '../assets/flags/it.png';
-import dkFlag from '../assets/flags/dk.png';
-import frFlag from '../assets/flags/fr.png';
-import cnFlag from '../assets/flags/cn.png';
-import gbFlag from '../assets/flags/gb.png';
+import aeFlag from '../assets/flags/AE.png';
+import auFlag from '../assets/flags/AU.png';
+import usFlag from '../assets/flags/US.png';
+import ruFlag from '../assets/flags/RU.png';
+import itFlag from '../assets/flags/IT.png';
+import dkFlag from '../assets/flags/DK.png';
+import frFlag from '../assets/flags/FR.png';
+import cnFlag from '../assets/flags/CN.png';
+import gbFlag from '../assets/flags/GB.png';
 
 const REGIONS = [
   { id: 1, flag: aeFlag, name: 'Arabic Emirates', url: 'shopname.ae' },

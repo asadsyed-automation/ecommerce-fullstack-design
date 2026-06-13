@@ -14,3 +14,10 @@ services:
         value: 5000
       - key: ALLOWED_ORIGIN
         sync: false
+      - key: IMAGEKIT_PUBLIC_KEY
+        sync: false
+      - key: IMAGEKIT_PRIVATE_KEY
+        sync: false
+      - key: IMAGEKIT_URL_ENDPOINT
+        value: https://ik.imagekit.io/2gdbnnqst
+

@@ -21,11 +21,11 @@ html, body, #root {
 }
 
 /* Desktop: normal CSS grid */
-.category-section__scroll-row {
+.category-section__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
 }
+
 
 /* -----------------------------------------------
    SUPPLIERS BY REGION — scroll row CSS
@@ -89,14 +89,16 @@ html, body, #root {
   /* ----- CATEGORY SECTIONS (Home & Outdoor, Consumer Electronics) ----- */
   .category-section__inner {
     grid-template-columns: 1fr !important;
-    padding: 14px 0 14px 16px; /* left padding only, right open for scroll */
+    padding: 16px !important;
+    overflow: visible !important;
+    border: none !important;
+    border-radius: 0 !important;
   }
   .category-section__promo {
     display: none !important;
   }
   .category-section__products {
     padding-left: 0 !important;
-    overflow: hidden;
   }
   .category-section__mobile-title {
     display: block !important;
@@ -104,38 +106,60 @@ html, body, #root {
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 12px;
-    padding-right: 16px;
   }
-
-  /* THE KEY FIX: horizontal scroll row */
-  .category-section__scroll-row {
+  .category-section__grid {
     display: flex !important;
     flex-direction: row !important;
+    overflow: visible !important;
     overflow-x: auto !important;
-    overflow-y: visible !important;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     gap: 10px;
     padding-bottom: 6px;
-    padding-right: 16px; /* breathing room at end of scroll */
-    /* CRITICAL: grid override must be fully removed */
-    grid-template-columns: unset !important;
+    border: none !important;
+    border-radius: 0 !important;
   }
-  .category-section__scroll-row::-webkit-scrollbar {
+  .category-section__grid::-webkit-scrollbar {
     display: none;
   }
-  .category-section__scroll-item {
-    flex: 0 0 140px !important;
-    min-width: 140px !important;
-    max-width: 140px !important;
+  .category-section__grid .category-card {
+    flex: 0 0 130px !important;
+    min-width: 130px !important;
+    max-width: 130px !important;
     scroll-snap-align: start;
+    border: 1px solid var(--border) !important;
+    border-radius: 8px !important;
+    height: auto !important;
   }
-  /* Product card fills its scroll item */
-  .category-section__scroll-item .product-card {
-    width: 100%;
-    height: 100%;
+
+  /* Category card vertical styling on mobile */
+  .category-card {
+    flex-direction: column !important;
+    height: auto !important;
+    padding: 10px !important;
   }
+  .category-card__image-wrap {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    order: -1 !important;
+    margin-bottom: 8px !important;
+    align-self: center !important;
+  }
+  .category-card__content {
+    padding-right: 0 !important;
+    text-align: center;
+  }
+  .category-card__name {
+    font-size: 13px !important;
+  }
+  .category-card__price {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: var(--text-primary) !important;
+  }
+
 
   /* ----- SUPPLIER SECTION ----- */
   .supplier-section__inner {
@@ -267,9 +291,10 @@ html, body, #root {
   .category-section__inner {
     grid-template-columns: 180px 1fr !important;
   }
-  .category-section__scroll-row {
+  .category-section__grid {
     grid-template-columns: repeat(3, 1fr) !important;
   }
+
 
   .supplier-section__inner {
     grid-template-columns: 1fr 300px !important;
@@ -291,7 +316,7 @@ html, body, #root {
   .deals-section__products {
     grid-template-columns: repeat(5, 1fr);
   }
-  .category-section__scroll-row {
+  .category-section__grid {
     grid-template-columns: repeat(4, 1fr);
   }
   .recommended-section__grid {

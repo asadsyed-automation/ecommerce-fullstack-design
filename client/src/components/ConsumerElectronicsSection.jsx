@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getProducts } from '../services/api';
-import ProductCard from './ProductCard';
+import CategoryCard from './CategoryCard';
 
 function ConsumerElectronicsSection() {
   const [products, setProducts] = useState([]);
@@ -26,38 +26,36 @@ function ConsumerElectronicsSection() {
       <div className="category-section__inner">
 
         {/* LEFT promo — desktop/tablet only */}
-        <div className="category-section__promo">
+        <div className="category-section__promo" style={{ backgroundImage: "url('/backgrounds/electronics.png')" }}>
           <div className="category-section__promo-title">
             Consumer electronics and gadgets
           </div>
-          <div className="category-section__promo-img"
-            style={{ background: 'linear-gradient(135deg, #e8f0fe, #c2d4f8)' }} />
           <button className="category-section__promo-btn">Source now →</button>
         </div>
+
 
         {/* RIGHT products */}
         <div className="category-section__products">
           <div className="category-section__mobile-title">Consumer electronics</div>
-          <div className="category-section__scroll-row">
+          <div className="category-section__grid">
             {loading
-              ? [...Array(4)].map((_, i) => (
-                  <div key={i} className="category-section__scroll-item">
-                    <div style={{
-                      width: '100%', aspectRatio: '1/1', borderRadius: '8px',
-                      background: 'var(--gray-100)', animation: 'pulse 1.5s infinite',
-                    }} />
-                  </div>
+              ? [...Array(8)].map((_, i) => (
+                  <div key={i} className="category-card" style={{
+                    height: '120px',
+                    background: 'var(--gray-50)',
+                    border: '1px solid var(--border)',
+                    animation: 'pulse 1.5s infinite',
+                  }} />
                 ))
               : products.map(p => (
-                  <div key={p._id} className="category-section__scroll-item">
-                    <ProductCard
-                      id={p._id}
-                      name={p.name}
-                      price={`$${p.price?.toFixed(2)}`}
-                      image={p.image}
-                      showFrom={true}
-                    />
-                  </div>
+                  <CategoryCard
+                    key={p._id}
+                    id={p._id}
+                    name={p.name}
+                    price={`$${p.price?.toFixed(2)}`}
+                    image={p.image}
+                    showFrom={true}
+                  />
                 ))
             }
           </div>
@@ -67,5 +65,6 @@ function ConsumerElectronicsSection() {
     </section>
   );
 }
+
 
 export default ConsumerElectronicsSection;

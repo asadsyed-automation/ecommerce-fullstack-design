@@ -24,6 +24,12 @@ export const createProduct = (data) => API.post('/products', data);
 export const updateProduct = (id, data) => API.put(`/products/${id}`, data);
 export const deleteProduct = (id) => API.delete(`/products/${id}`);
 export const getAdminStats = () => API.get('/products/admin/stats');
+export const uploadImage = (formData) => API.post('/upload', formData, {
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+});
+
 
 // ─────────────────────────────────────────────
 // Auth APIs

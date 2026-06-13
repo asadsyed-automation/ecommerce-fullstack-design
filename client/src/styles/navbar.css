@@ -34,10 +34,14 @@
   font-size: 16px;
 }
 .top-bar__search {
+  margin-left: 120px;
+  margin-right: 120px;
   flex: 1;
   display: flex;
   border: 1px solid var(--border);
   border-radius: 6px;
+  border-color: #0F7BFF;
+  border-width: 2px;
   overflow: hidden;
   max-width: 600px;
 }
@@ -465,4 +469,4 @@
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
-}
+}

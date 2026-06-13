@@ -9,7 +9,7 @@ function Footer() {
         {/* Column 1: Brand */}
         <div className="footer__brand">
           <div className="footer__logo">
-            <div className="footer__logo-icon">🛍</div>
+            <div className="footer__logo-icon">B</div>
             <span>Brand</span>
           </div>
           <p>Best information about the company goes here but now lorem ipsum is</p>
@@ -18,7 +18,7 @@ function Footer() {
               <img src="https://cdn.simpleicons.org/facebook/555" alt="Facebook" width="14" height="14" />
             </a>
             <a href="#" className="footer__social-link" aria-label="Twitter">
-              <img src="https://cdn.simpleicons.org/x/555" alt="Twitter" width="14" height="14" />
+              <img src="https://cdn.simpleicons.org/whatsapp/555" alt="Twitter" width="14" height="14" />
             </a>
             <a href="#" className="footer__social-link" aria-label="LinkedIn">
               <img src="https://cdn.simpleicons.org/linkedin/555" alt="LinkedIn" width="14" height="14" />

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  baseURL: 'https://ecommerce-fullstack-design-1.onrender.com/api',
 });
 
 // ─────────────────────────────────────────────

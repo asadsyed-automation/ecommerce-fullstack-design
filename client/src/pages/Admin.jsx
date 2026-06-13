@@ -5,6 +5,7 @@ import {
   getAdminStats, getProducts,
   createProduct, updateProduct, deleteProduct
 } from '../services/api';
+import ImageUpload from '../components/ImageUpload';
 import '../styles/admin.css';
 
 // ─────────────────────────────────────────────────────────
@@ -317,7 +318,6 @@ function ProductModal({ product, onClose, onSave }) {
           {[
             { name: 'name', label: 'Product Name', type: 'text', required: true, placeholder: 'e.g. Wireless Headphones' },
             { name: 'price', label: 'Price (USD)', type: 'number', required: true, placeholder: '0.00' },
-            { name: 'image', label: 'Image URL', type: 'url', placeholder: 'https://example.com/image.jpg' },
             { name: 'category', label: 'Category', type: 'text', placeholder: 'e.g. Electronics' },
             { name: 'stock', label: 'Stock Quantity', type: 'number', placeholder: '0' },
           ].map((field) => (
@@ -337,6 +337,16 @@ function ProductModal({ product, onClose, onSave }) {
               />
             </div>
           ))}
+
+          <div>
+            <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
+              Product Image
+            </label>
+            <ImageUpload
+              value={form.image}
+              onChange={(url) => setForm((prev) => ({ ...prev, image: url }))}
+            />
+          </div>
 
           <div>
             <label style={{ display: 'block', marginBottom: '6px', fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
